@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Distinte Base</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-4">⬅ Torna alla Home</a>
+
+    <h2>Elenco Distinte Base</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Nome Distinta</th>
+                <th>Costo Totale</th>
+                <th>N. Componenti</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in distinte %}
+            <tr>
+                <td>{{ d[1] }} - {{ d[2] }}</td>
+                <td>€ {{ "%.2f"|format(d[3]) }}</td>
+                <td>{{ d[4] }}</td>
+                <td>
+                    <a href="{{ url_for('dettaglio_distinta', id_distinta=d[0]) }}" class="btn btn-primary btn-sm">📄 Dettaglio</a>
+                    <a href="{{ url_for('simula_distinta', id_distinta=d[0]) }}" class="btn btn-warning btn-sm">⚙️ Simula produzione</a>
+                    <a href="{{ url_for('genera_ordine_fornitore', id_distinta=d[0]) }}" class="btn btn-success btn-sm">🧾 Genera Ordine</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Dettaglio Ordine Fornitore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>📄 Dettaglio Ordine Fornitore</h2>
+    <div class="mb-3">
+        <strong>Ordine n°:</strong> {{ ordine[0] }}<br>
+        <strong>Fornitore:</strong> {{ ordine[1] }}<br>
+        <strong>Email:</strong> {{ ordine[2] }}<br>
+        <strong>Telefono:</strong> {{ ordine[3] }}<br>
+        <strong>Data ordine:</strong> {{ ordine[4] }}<br>
+        <strong>Riferimento OC:</strong> {{ ordine[5] }}
+    </div>
+
+    <h5> Componenti ordinati:</h5>
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Componente</th>
+                <th>QTY</th>
+                <th>Data richiesta</th>
+                <th>Data confermata</th>
+                <th>Data consegna</th>
+                <th> Costo unitario</th>
+                <th> Totale riga</th>
+                <th>📎 File</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set totale_ordine = 0 %}
+            {% for r in righe %}
+            {% set totale_riga = (r[1] or 0) * (r[6] or 0) %}
+            {% set totale_ordine = totale_ordine + totale_riga %}
+            <tr>
+                <td>{{ r[0] }}</td>
+                <td>{{ r[1] }}</td>
+                <td>{{ r[2] or '-' }}</td>
+                <td>{{ r[3] or '-' }}</td>
+                <td>{{ r[4] or '-' }}</td>
+                <td>€ {{ "%.2f"|format(r[6] or 0) }}</td>
+                <td>€ {{ "%.2f"|format(totale_riga) }}</td>
+                <td>
+                    {% if r[5] %}
+                        <a href="{{ url_for('static', filename='uploads/' ~ r[5]) }}" target="_blank" class="btn btn-sm btn-outline-primary">📂 Vedi</a>
+                    {% else %}
+                        <span class="text-muted">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="table-secondary fw-bold">
+                <td colspan="6" class="text-end">Totale Ordine:</td>
+                <td colspan="2">€ {{ "%.2f"|format(totale_ordine) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <a href="{{ url_for('modifica_ordine_fornitore', id_ordine=id_ordine) }}" class="btn btn-warning"> Modifica Ordine</a>
+
+    <form action="{{ url_for('elimina_ordine_fornitore', id_ordine=id_ordine) }}" method="POST" class="d-inline">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo ordine?')">🗑️ Elimina Ordine</button>
+    </form>
+
+    <a href="{{ url_for('elenco_ordini_fornitore') }}" class="btn btn-secondary">⬅ Torna agli ordini</a>
+</div>
+</body>
+</html>

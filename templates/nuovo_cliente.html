@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>➕ Nuovo Cliente</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Ragione Sociale</label>
+            <input type="text" class="form-control" name="ragione_sociale" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Indirizzo</label>
+            <input type="text" class="form-control" name="indirizzo">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Telefono</label>
+            <input type="text" class="form-control" name="telefono">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">IBAN</label>
+            <input type="text" class="form-control" name="iban">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Persona di riferimento</label>
+            <input type="text" class="form-control" name="persona_riferimento">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Note</label>
+            <textarea class="form-control" name="note"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Salva Cliente</button>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Annulla</a>
+    </form>
+</div>
+{% endblock %}

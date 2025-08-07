@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulazione produzione</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <h2 class="mb-4 text-primary">Simulazione Produzione - {{ nome }}</h2>
+
+    <form method="POST" class="mb-4">
+        <div class="input-group w-25">
+            <label class="input-group-text" for="qty">Quantità:</label>
+            <input type="number" class="form-control" id="qty" name="qty" value="{{ qty }}" min="1" required>
+            <button type="submit" class="btn btn-success">Simula</button>
+        </div>
+    </form>
+
+    {% if risultati %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Componente</th>
+                        <th>Quantità per unità</th>
+                        <th>Totale quantità</th>
+                        <th>Costo unitario</th>
+                        <th>Costo totale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in risultati %}
+                    <tr>
+                        <td>{{ r[0] }}</td>
+                        <td>{{ r[1] }}</td>
+                        <td>{{ r[2] }}</td>
+                        <td>{{ "{:.2f}".format(r[3]) }} €</td>
+                        <td class="fw-bold text-end">{{ "{:.2f}".format(r[4]) }} €</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="4" class="text-end">Totale produzione:</th>
+                        <th class="text-end text-success fs-5">{{ "{:.2f}".format(costo_totale) }} €</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted">Nessun componente da simulare. Inserisci i componenti nella distinta base.</p>
+    {% endif %}
+
+    <a href="{{ url_for('home') }}" class="btn btn-secondary mt-4">🔙 Torna alla home</a>
+</div>
+
+</body>
+</html>

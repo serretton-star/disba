@@ -1,0 +1,30 @@
+
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="text-center mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-3">
+            <a href="{{ url_for('nuovo_cliente') }}" class="btn btn-primary w-100">Clienti</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{{ url_for('elenco_fornitori') }}" class="btn btn-primary w-100">Fornitori</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{{ url_for('distinte') }}" class="btn btn-primary w-100">Distinta Base</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="#" class="btn btn-primary w-100">Ordini Clienti</a> {# route da creare #}
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{{ url_for('distinte') }}" class="btn btn-primary w-100">Anagrafica Distinta</a>
+        </div>
+        <div class="col-md-4 mb-3">
+            <a href="{{ url_for('elenco_ordini_fornitore') }}" class="btn btn-primary w-100">Ordini Fornitori</a>
+        </div>
+    </div>
+</div>
+<footer class="text-end mt-5">
+    <img src="{{ url_for('static', filename='logo_itsaldature.png') }}" alt="IT Saldature" style="height: 50px;">
+</footer>
+{% endblock %}

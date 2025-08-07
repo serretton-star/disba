@@ -1,0 +1,46 @@
+<!DOCTYPE html> 
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Ordini Fornitore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>📦 Ordini ai Fornitori</h2>
+    
+    <div class="d-flex justify-content-between mb-3">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">⬅ Torna alla Home</a>
+        <a href="{{ url_for('crea_ordine_manuale') }}" class="btn btn-success">➕ Nuovo Ordine Manuale</a>
+    </div>
+
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>N° Ordine</th>
+                <th>Fornitore</th>
+                <th>Data Ordine</th>
+                <th>Riferimento OC</th>
+                <th>Stato</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in ordini %}
+            <tr>
+                <td>{{ o[1] }}</td>
+                <td>{{ o[2] }}</td>
+                <td>{{ o[3] }}</td>
+                <td>{{ o[4] }}</td>
+                <td style="font-size: 1.5em;">{{ o[5] }}</td> <!-- Semaforo -->
+                <td>
+                    <a href="{{ url_for('dettaglio_ordine_fornitore', id_ordine=o[0]) }}" class="btn btn-sm btn-primary">📄 Dettaglio</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+

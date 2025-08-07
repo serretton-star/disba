@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Creazione Ordine Fornitore Manuale</h2>
+
+    <form method="POST">
+        <!-- Selezione fornitore -->
+        <div class="mb-3">
+            <label for="fornitore_esistente" class="form-label">Fornitore</label>
+            <select class="form-select" name="fornitore_esistente" id="fornitore_esistente" required>
+                <option value="" disabled selected>-- Seleziona un fornitore --</option>
+                {% for f in fornitori %}
+                    <option value="{{ f[0] }}">{{ f[1] }}</option>
+                {% endfor %}
+                <option value="nuovo"> Nuovo fornitore</option>
+            </select>
+        </div>
+
+        <!-- Campi nuovo fornitore -->
+        <div id="nuovo_fornitore_fields" style="display: none;">
+            <div class="mb-2"><input type="text" name="nome_nuovo" class="form-control" placeholder="Nome fornitore"></div>
+            <div class="mb-2"><input type="email" name="email_nuovo" class="form-control" placeholder="Email"></div>
+            <div class="mb-3"><input type="text" name="telefono_nuovo" class="form-control" placeholder="Telefono"></div>
+        </div>
+
+        <!-- Riferimento OC -->
+        <div class="mb-3">
+            <label for="riferimento_oc" class="form-label">Riferimento OC</label>
+            <input type="text" name="riferimento_oc" class="form-control" required>
+        </div>
+
+        <!-- Tabella righe ordine -->
+        <table class="table table-bordered" id="righe_table">
+            <thead class="table-light">
+                <tr>
+                    <th>Componente</th>
+                    <th>Quantità</th>
+                    <th>Prezzo Unitario</th>
+                    <th>Totale Riga</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody id="righe_body">
+                <tr>
+                    <td>
+                        <select name="componente[]" class="form-select" required>
+                            <option value="" disabled selected>-- Seleziona --</option>
+                            {% for c in componenti %}
+                                <option value="{{ c[0] }}">{{ c[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input type="number" name="qty[]" class="form-control qty" value="1" min="1" required></td>
+                    <td><input type="number" step="0.01" name="prezzo[]" class="form-control prezzo" value="0" required></td>
+                    <td class="totale_riga">€ 0.00</td>
+                    <td><button type="button" class="btn btn-danger btn-sm" onclick="rimuoviRiga(this)">🗑</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button type="button" class="btn btn-secondary mb-3" onclick="aggiungiRiga()"> Aggiungi Riga</button>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary">Salva Ordine</button>
+        <a href="{{ url_for('elenco_ordini_fornitore') }}" class="btn btn-secondary">Annulla</a>
+    </form>
+</div>
+
+<script>
+function aggiungiRiga() {
+    let row = document.querySelector('#righe_body tr').cloneNode(true);
+    row.querySelectorAll('input').forEach(input => input.value = input.classList.contains('qty') ? 1 : 0);
+    row.querySelector('.totale_riga').textContent = '€ 0.00';
+    document.querySelector('#righe_body').appendChild(row);
+}
+
+function rimuoviRiga(btn) {
+    const table = document.querySelector('#righe_body');
+    if (table.rows.length > 1) btn.closest('tr').remove();
+}
+
+document.querySelector('#fornitore_esistente').addEventListener('change', function () {
+    document.getElementById('nuovo_fornitore_fields').style.display = this.value === 'nuovo' ? 'block' : 'none';
+});
+
+function aggiornaTotaleRiga(riga) {
+    let qty = parseFloat(riga.querySelector('.qty').value || 0);
+    let prezzo = parseFloat(riga.querySelector('.prezzo').value || 0);
+    riga.querySelector('.totale_riga').textContent = '€ ' + (qty * prezzo).toFixed(2);
+}
+
+document.addEventListener('input', function (e) {
+    if (e.target.classList.contains('qty') || e.target.classList.contains('prezzo')) {
+        aggiornaTotaleRiga(e.target.closest('tr'));
+    }
+});
+</script>
+{% endblock %}
